@@ -44,17 +44,6 @@ resource "azurerm_mysql_server" "replica" {
   }
 }
 
-# MySQL Database within a MySQL Server
-resource "azurerm_mysql_database" "db" {
-  count               = var.enable_db ? 1 : 0
-  name                = "${var.names.product_name}-${var.names.location}db-${var.srvr_id}"
-  resource_group_name = var.resource_group_name
-  server_name         = azurerm_mysql_server.primary.0.name
-  charset             = "utf8"
-  collation           = "utf8_unicode_ci"
-  depends_on          = [azurerm_mysql_server.primary]
-}
-
 # Sets MySQL Configuration values on a MySQL Server.
 resource "azurerm_mysql_configuration" "config_replica" {
   for_each            = local.mysql_config
